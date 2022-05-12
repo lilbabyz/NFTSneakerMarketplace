@@ -69,7 +69,7 @@ describe("NFTMarketplace", function () {
     it("should list a new sneaker", async () => {
       const tokenURI = "https://example.com/1";
       const tokenId = 1;
-      const tokenPrice = 10;
+      const tokenPrice = parseAmount(10);
 
       const sneakerCount = 1;
       await newListing(tokenURI, tokenId, tokenPrice);
@@ -82,7 +82,7 @@ describe("NFTMarketplace", function () {
     it("should transfer token ownership to marketplace", async () => {
       const tokenURI = "https://example.com/1";
       const tokenId = 1;
-      const tokenPrice = 10;
+      const tokenPrice = parseAmount(10);
 
       await newListing(tokenURI, tokenId, tokenPrice);
 
@@ -92,7 +92,7 @@ describe("NFTMarketplace", function () {
     it("should fail to list sneaker with zero price", async () => {
       const tokenURI = "https://example.com/1";
       const tokenId = 1;
-      const tokenPrice = 0;
+      const tokenPrice = parseAmount(0);
 
       await expect(
         newListing(tokenURI, tokenId, tokenPrice)
@@ -104,7 +104,7 @@ describe("NFTMarketplace", function () {
     it("should pay seller on successful purchase", async () => {
       const tokenURI = "https://example.com/1";
       const tokenId = 1;
-      const tokenPrice = 10;
+      const tokenPrice = parseAmount(10);
 
       await newListing(tokenURI, tokenId, tokenPrice);
 
@@ -121,7 +121,7 @@ describe("NFTMarketplace", function () {
     it("should transfer token ownership to buyer", async () => {
       const tokenURI = "https://example.com/1";
       const tokenId = 1;
-      const tokenPrice = 10;
+      const tokenPrice = parseAmount(10);
 
       await newListing(tokenURI, tokenId, tokenPrice);
 
@@ -134,7 +134,7 @@ describe("NFTMarketplace", function () {
     it("should fail to buy already sold sneaker", async () => {
       const tokenURI = "https://example.com/1";
       const tokenId = 1;
-      const tokenPrice = 10;
+      const tokenPrice = parseAmount(10);
 
       await newListing(tokenURI, tokenId, tokenPrice);
 
@@ -150,7 +150,7 @@ describe("NFTMarketplace", function () {
     it("should fail to buy sneaker without paying sneaker price", async () => {
       const tokenURI = "https://example.com/1";
       const tokenId = 1;
-      const tokenPrice = 10;
+      const tokenPrice = parseAmount(10);
 
       await newListing(tokenURI, tokenId, tokenPrice);
 
