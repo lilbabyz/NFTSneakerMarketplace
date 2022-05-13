@@ -17,10 +17,9 @@ const AddNfts = ({ save, address }) => {
   const [attributes, setAttributes] = useState([]);
   const [show, setShow] = useState(false);
 
-
   // check if all form data has been filled
   const isFormFilled = () =>
-      name && ipfsImage && description && attributes.length > 2;
+    name && ipfsImage && description && attributes.length === 2;
 
   // close the popup modal
   const handleClose = () => {
@@ -33,7 +32,7 @@ const AddNfts = ({ save, address }) => {
 
   // add an attribute to an NFT
   const setAttributesFunc = (e, trait_type) => {
-    const {value} = e.target;
+    const { value } = e.target;
     const attributeObject = {
       trait_type,
       value,
@@ -44,7 +43,6 @@ const AddNfts = ({ save, address }) => {
     const index = arr.findIndex((el) => el.trait_type === trait_type);
 
     if (index >= 0) {
-
       // update the existing attribute
       arr[index] = {
         trait_type,
@@ -137,7 +135,6 @@ const AddNfts = ({ save, address }) => {
             <Form.Label>
               <h5>Properties</h5>
             </Form.Label>
-            
 
             <Form.Control
               as="select"
@@ -183,6 +180,7 @@ const AddNfts = ({ save, address }) => {
           <Button variant="outline-secondary" onClick={handleClose}>
             Close
           </Button>
+
           <Button
             variant="dark"
             disabled={!isFormFilled()}
@@ -207,7 +205,6 @@ const AddNfts = ({ save, address }) => {
 };
 
 AddNfts.propTypes = {
-
   // props passed into this component
   save: PropTypes.func.isRequired,
   address: PropTypes.string.isRequired,
