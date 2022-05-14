@@ -1,7 +1,7 @@
 # Sneakers Marketplace
 SneakerNFT is a marketplace where users can mint virtual sneakers and list them on the marketplace for sale
 
-Demo Website: [Demo](https://ariesgun.github.io/celo-domain)
+Demo Website: [Demo](https://rinwaowuogba.github.io/NFTSneakerMarketplace)
 
 ## 1. Tech Stack
 This boilerplate uses the following tech stack:
