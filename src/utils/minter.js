@@ -79,14 +79,20 @@ export const uploadToIpfs = async (e) => {
 export const getNfts = async (minterContract, marketplaceContract) => {
   try {
     const nfts = [];
-    const nftsLength = await marketplaceContract.methods.getSneakerCount().call();
+    const nftsLength = await marketplaceContract.methods
+      .getSneakerCount()
+      .call();
 
     // contract starts minting from index 1
     for (let i = 1; i <= Number(nftsLength); i++) {
       const nft = new Promise(async (resolve) => {
-        const sneaker = await marketplaceContract.methods.getSneakers(i).call();
-        const res = await minterContract.methods.tokenURI(sneaker.tokenId).call();
-        const owner = await minterContract.methods.ownerOf(sneaker.tokenId).call();
+        const sneaker = await marketplaceContract.methods.getSneaker(i).call();
+        const res = await minterContract.methods
+          .tokenURI(sneaker.tokenId)
+          .call();
+        const owner = await minterContract.methods
+          .ownerOf(sneaker.tokenId)
+          .call();
 
         const meta = await fetchNftMeta(res);
         resolve({
@@ -153,7 +159,9 @@ export const purchaseItem = async (
       try {
         console.log(marketplaceContract, index);
         const { defaultAccount } = kit;
-        const sneaker = await marketplaceContract.methods.getSneakers(index).call();
+        const sneaker = await marketplaceContract.methods
+          .getSneaker(index)
+          .call();
         await marketplaceContract.methods
           .buySneaker(index)
           .send({ from: defaultAccount, value: sneaker.price });
