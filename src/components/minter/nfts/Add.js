@@ -4,8 +4,8 @@ import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 import { uploadToIpfs } from "../../../utils/minter";
 
 // basic attributes that can be added to NFT
-const COLORS = ["Red", "Green", "Blue", "Cyan", "Yellow", "Purple"];
-const CATEGORIES = ["High top", "Trainer", "Casual"];
+
+const SNEAKERTYPES = ["High top", "Trainer", "Casual"];
 
 const AddNfts = ({ save, address }) => {
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ const AddNfts = ({ save, address }) => {
 
   // check if all form data has been filled
   const isFormFilled = () =>
-    name && ipfsImage && description && attributes.length === 2;
+    name && ipfsImage && description && attributes.length === 1;
 
   // close the popup modal
   const handleClose = () => {
@@ -136,40 +136,23 @@ const AddNfts = ({ save, address }) => {
               <h5>Properties</h5>
             </Form.Label>
 
-            <Form.Control
-              as="select"
-              className={"mb-3"}
-              onChange={async (e) => {
-                setAttributesFunc(e, "color");
-              }}
-              placeholder="Color"
-            >
-              <option hidden>Sneaker Color</option>
-              {COLORS.map((color) => (
-                <option
-                  key={`color-${color.toLowerCase()}`}
-                  value={color.toLowerCase()}
-                >
-                  {color}
-                </option>
-              ))}
-            </Form.Control>
+            
 
             <Form.Control
               as="select"
               className={"mb-3"}
               onChange={async (e) => {
-                setAttributesFunc(e, "category");
+                setAttributesFunc(e, "Sneaker Type");
               }}
-              placeholder="Sneaker Category"
+              placeholder="Sneaker Type"
             >
-              <option hidden>Category</option>
-              {CATEGORIES.map((category) => (
+              <option hidden>Sneaker Type</option>
+              {SNEAKERTYPES.map((sneakertype) => (
                 <option
-                  key={`caegory-${category.toLowerCase()}`}
-                  value={category.toLowerCase()}
+                  key={`sneakertype-${sneakertype.toLowerCase()}`}
+                  value={sneakertype.toLowerCase()}
                 >
-                  {category}
+                  {sneakertype}
                 </option>
               ))}
             </Form.Control>

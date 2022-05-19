@@ -16,6 +16,7 @@ contract NFTMarketplace is ReentrancyGuard {
         uint256 price;
         address payable seller;
         bool sold;
+        bool forSale;
     }
 
     mapping(uint256 => Sneaker) public sneakers;
@@ -33,12 +34,15 @@ contract NFTMarketplace is ReentrancyGuard {
             _tokenId,
             _price,
             payable(msg.sender),
-            false
+            false,
+            true
+
         );
     }
 
     function buySneaker(uint256 _tokenId) external payable nonReentrant {
         Sneaker storage sneaker = sneakers[_tokenId];
+        require(sneaker.forSale == true, "this  sneaker is not for sale");
         require(
             _tokenId > 0 && _tokenId <= sneakerCount,
             "NFTMarketplace: sneaker doesn't exist"
@@ -56,6 +60,21 @@ contract NFTMarketplace is ReentrancyGuard {
     function getSneaker(uint256 _tokenId) public view returns (Sneaker memory) {
         return sneakers[_tokenId];
     }
+
+
+
+  function toggleForSale(uint256 _tokenId) public {
+      Sneaker storage sneaker = sneakers[_tokenId];
+    require(msg.sender != address(0));
+    require(sneaker.seller == msg.sender);
+    
+    // if token's forSale is false make it true and vice versa
+    if(sneaker.forSale) {
+      sneaker.forSale = false;
+    } else {
+      sneaker.forSale = true;
+    }
+  }
 
     function modifySneakerPrice(uint256 _sneakerPrice, uint256 _tokenId)
         public

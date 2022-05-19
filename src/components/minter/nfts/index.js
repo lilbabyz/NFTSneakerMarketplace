@@ -6,7 +6,7 @@ import AddNfts from "./Add";
 import Nft from "./Card";
 import Loader from "../../ui/Loader";
 import { NotificationSuccess, NotificationError } from "../../ui/Notifications";
-import { getNfts, createNft, purchaseItem } from "../../../utils/minter";
+import { getNfts, createNft, purchaseItem, toggleForsale, changePrice } from "../../../utils/minter";
 import { Row } from "react-bootstrap";
 
 const NftList = ({ minterContract, marketplaceContract, name }) => {
@@ -75,6 +75,49 @@ const NftList = ({ minterContract, marketplaceContract, name }) => {
     }
   };
 
+  const toggleSale = async (index) => {
+    try {
+      setLoading(true);
+
+      await toggleForsale(
+        minterContract,
+        marketplaceContract,
+        performActions,
+        index
+      );
+
+      toast(<NotificationSuccess text="Updating NFT list...." />);
+      getAssets();
+    } catch (error) {
+      console.log({ error });
+      toast(<NotificationError text="Failed to toggle an NFT." />);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const modifyPrice = async (newPrice, index) => {
+    try {
+      setLoading(true);
+
+      await changePrice(
+        minterContract,
+        marketplaceContract,
+        performActions,
+        index,
+        newPrice,
+      );
+
+      toast(<NotificationSuccess text="Updating NFT list...." />);
+      getAssets();
+    } catch (error) {
+      console.log({ error });
+      toast(<NotificationError text="Failed to change price of NFT." />);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     try {
       if (address && minterContract) {
@@ -100,11 +143,15 @@ const NftList = ({ minterContract, marketplaceContract, name }) => {
                 <Nft
                   key={_nft.index}
                   purchaseItem={() => buy(_nft.index, _nft.tokenId)}
+                  toggleForsale={() => toggleSale(_nft.index)}
+                  modifyPrice= {modifyPrice}
                   nft={{
                     ..._nft,
                   }}
                   isOwner={_nft.owner === address}
                   isSold={_nft.sold}
+                  isForsale = {_nft.forSale}
+                  
                 />
               ))}
             </Row>

@@ -90,19 +90,17 @@ export const getNfts = async (minterContract, marketplaceContract) => {
         const res = await minterContract.methods
           .tokenURI(sneaker.tokenId)
           .call();
-        const owner = await minterContract.methods
-          .ownerOf(sneaker.tokenId)
-          .call();
 
         const meta = await fetchNftMeta(res);
         resolve({
           index: i,
-          owner,
           nft: sneaker.nft,
           tokenId: sneaker.tokenId,
           price: sneaker.price,
           seller: sneaker.seller,
           sold: sneaker.sold,
+          forSale: sneaker.forSale,
+          owner:meta.data.owner,
           name: meta.data.name,
           image: meta.data.image,
           description: meta.data.description,
@@ -165,6 +163,56 @@ export const purchaseItem = async (
         await marketplaceContract.methods
           .buySneaker(index)
           .send({ from: defaultAccount, value: sneaker.price });
+      } catch (error) {
+        console.log({ error });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+export const toggleForsale = async (
+  minterContract,
+  marketplaceContract,
+  performActions,
+  index,
+) => {
+  try {
+    await performActions(async (kit) => {
+      try {
+        console.log(marketplaceContract, index);
+        const { defaultAccount } = kit;
+        await marketplaceContract.methods
+          .toggleForSale(index)
+          .send({ from: defaultAccount});
+      } catch (error) {
+        console.log({ error });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const changePrice = async (
+  minterContract,
+  marketplaceContract,
+  performActions,
+  index,
+  newPrice,
+) => {
+  try {
+    await performActions(async (kit) => {
+      try {
+        console.log(marketplaceContract, index);
+        const { defaultAccount } = kit;
+        await marketplaceContract.methods
+          .modifySneakerPrice(newPrice, index)
+          .send({ from: defaultAccount});
       } catch (error) {
         console.log({ error });
       }
