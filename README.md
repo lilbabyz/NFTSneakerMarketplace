@@ -2,4 +2,4 @@ SneakerNFT is a marketplace where users can mint virtual sneakers and list them 
 
 ### Demo
 
-https://iridescent-belekoy-14cd0e.netlify.app
+https://monumental-centaur-ae7f6f.netlify.app
