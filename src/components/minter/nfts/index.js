@@ -104,8 +104,9 @@ const NftList = ({ minterContract, marketplaceContract, name }) => {
         minterContract,
         marketplaceContract,
         performActions,
-        index,
         newPrice,
+        index,
+        
       );
 
       toast(<NotificationSuccess text="Updating NFT list...." />);
@@ -142,9 +143,10 @@ const NftList = ({ minterContract, marketplaceContract, name }) => {
               {nfts.map((_nft) => (
                 <Nft
                   key={_nft.index}
+                  contractOwner={address}
                   purchaseItem={() => buy(_nft.index, _nft.tokenId)}
                   toggleForsale={() => toggleSale(_nft.index)}
-                  modifyPrice= {modifyPrice}
+                  modPrice= {modifyPrice}
                   nft={{
                     ..._nft,
                   }}

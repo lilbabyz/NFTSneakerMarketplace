@@ -3,13 +3,11 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-
 import "hardhat/console.sol";
 
-contract NFTMarketplace is ReentrancyGuard {
+contract NFTMarketplace {
     uint256 public sneakerCount = 0;
-
+// declaring a struct for the sneaker
     struct Sneaker {
         IERC721 nft;
         uint256 tokenId;
@@ -20,12 +18,11 @@ contract NFTMarketplace is ReentrancyGuard {
     }
 
     mapping(uint256 => Sneaker) public sneakers;
+    
 
-    function listSneaker(
-        IERC721 _nft,
-        uint256 _tokenId,
-        uint256 _price
-    ) external nonReentrant {
+    // this function will add a new sneaker to the marketplace 
+    function listSneaker(IERC721 _nft, uint256 _tokenId, uint256 _price
+    ) external {
         require(_price > 0, "NFTMarketplace: Price should be above zero");
         sneakerCount++;
         _nft.transferFrom(msg.sender, address(this), _tokenId);
@@ -39,16 +36,14 @@ contract NFTMarketplace is ReentrancyGuard {
 
         );
     }
-
-    function buySneaker(uint256 _tokenId) external payable nonReentrant {
+  // this function will facilitate the buying of a sneaker nft when called
+    function buySneaker(uint256 _tokenId) external payable {
         Sneaker storage sneaker = sneakers[_tokenId];
         require(sneaker.forSale == true, "this  sneaker is not for sale");
-        require(
-            _tokenId > 0 && _tokenId <= sneakerCount,
-            "NFTMarketplace: sneaker doesn't exist"
+        require(_tokenId > 0 && _tokenId <= sneakerCount,
+        "NFTMarketplace: sneaker doesn't exist"
         );
-        require(
-            msg.value >= sneaker.price,
+        require(msg.value >= sneaker.price,
             "NFTMarketplace: not enough balance"
         );
         require(!sneaker.sold, "NFTMarketplace: sneaker already sold");
@@ -57,12 +52,14 @@ contract NFTMarketplace is ReentrancyGuard {
         sneaker.nft.transferFrom(address(this), msg.sender, sneaker.tokenId);
     }
 
+
+  // this function will get a sneaker listing from the mapping list
     function getSneaker(uint256 _tokenId) public view returns (Sneaker memory) {
         return sneakers[_tokenId];
     }
 
 
-
+// this function will set the sneaker listing to not for sale and only the owner can do that
   function toggleForSale(uint256 _tokenId) public {
       Sneaker storage sneaker = sneakers[_tokenId];
     require(msg.sender != address(0));
@@ -75,7 +72,7 @@ contract NFTMarketplace is ReentrancyGuard {
       sneaker.forSale = true;
     }
   }
-
+// this function will facilitate the changing of the price of a sneaker by the owner
     function modifySneakerPrice(uint256 _sneakerPrice, uint256 _tokenId)
         public
         payable
@@ -87,6 +84,11 @@ contract NFTMarketplace is ReentrancyGuard {
         sneakers[_tokenId].price = _sneakerPrice;
     }
 
+
+   
+
+
+  // this function will get the total number of sneaker in the marketplace
     function getSneakerCount() public view returns (uint256) {
         return sneakerCount;
     }

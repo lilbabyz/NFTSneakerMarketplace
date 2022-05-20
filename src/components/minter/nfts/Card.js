@@ -7,23 +7,16 @@ import { useEffect, useState, useCallback } from "react";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 
 
-  const NftCard = ({ nft, purchaseItem, isSold, isOwner, isForsale, toggleForsale, modifyPrice }) => {
+  const NftCard = ({ nft, purchaseItem, isSold, isOwner, isForsale, toggleForsale, modPrice, contractOwner }) => {
   const { owner, price, image, description, name, index, attributes } = nft;
   const [newPrice, setnewPrice] = useState(0);
-  const [show, setShow] = useState(false);
   
 
-  // check if all form data has been filled
-  const isFormFilled = () => newPrice;
 
-  // close the popup modal
-  const handleClose = () => {
-    setShow(false);
-    setnewPrice(0);
-  };
 
-  // display the popup modal
-  const handleShow = () => setShow(true);
+  const handlemodifyPrice = (newPrice)=>{
+      modPrice(newPrice, index);
+  }
 
   return (
     <Col key={index}>
@@ -103,61 +96,28 @@ import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
             </div>
           )}
 
-       <div className="d-flex m-2 justify-content-center">
-       <Button
-        onClick={handleShow}
-        className= "btn btn-primary"
-      >
-        Change price
-      </Button>
-      </div>
+      
 
-       {/* Modal */}
- <Modal show={show} onHide={handleClose} centered>
- <Modal.Header closeButton>
-   <Modal.Title>Change Sneaker Price</Modal.Title>
- </Modal.Header>
-
- <Modal.Body>
-   <Form>
-   <FloatingLabel
-              controlId="inputPrice"
-              label="Price"
-              className="mb-3"
-            >
+      {contractOwner === owner && (
+            <>
               <Form.Control
-                as="textarea"
-                placeholder="Price"
-                style={{ height: "80px" }}
+                className={"pt-2 mb-1"}
+                type="text"
+                placeholder="Enter new price"
                 onChange={(e) => {
                   setnewPrice(e.target.value);
                 }}
               />
-            </FloatingLabel>
-   </Form>
- </Modal.Body>
+              <Button
+                variant="primary"
+                onClick={() => handlemodifyPrice(newPrice)}
+              >
+                Change sneaker price
+              </Button>
+            </>
+          )}
 
- <Modal.Footer>
-   <Button variant="outline-secondary" onClick={handleClose}>
-     Close
-   </Button>
-
-   <Button
-     variant="dark"
-     disabled={!isFormFilled()}
-     onClick = {() => {
-       modifyPrice({
-         newPrice,
-         index
-       });
-       handleClose();
-     }}
-   >
-     Save
-   </Button>
- </Modal.Footer>
-</Modal>
-
+  
 
         </Card.Body>
       </Card>
@@ -169,7 +129,7 @@ import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 NftCard.propTypes = {
   // props passed into this component
   nft: PropTypes.instanceOf(Object).isRequired,
-  modifyPrice: PropTypes.func.isRequired,
+  modPrice: PropTypes.func.isRequired,
 
 };
 

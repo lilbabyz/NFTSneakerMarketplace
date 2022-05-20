@@ -202,16 +202,21 @@ export const changePrice = async (
   minterContract,
   marketplaceContract,
   performActions,
-  index,
   newPrice,
+  index,
+  
 ) => {
   try {
     await performActions(async (kit) => {
       try {
         console.log(marketplaceContract, index);
         const { defaultAccount } = kit;
+
+        const newsneakerPrice = ethers.utils.parseUnits(String(newPrice), "ether");
+      console.log(newsneakerPrice);
+
         await marketplaceContract.methods
-          .modifySneakerPrice(newPrice, index)
+          .modifySneakerPrice(newsneakerPrice, index)
           .send({ from: defaultAccount});
       } catch (error) {
         console.log({ error });
